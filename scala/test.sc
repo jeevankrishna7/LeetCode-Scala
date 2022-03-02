@@ -1,45 +1,36 @@
-import scala.collection.mutable.ArrayBuffer
-def findDiagonalOrder(mat: Array[Array[Int]]): Array[Int] = {
 
-  var go = 0
-  val tracker = scala.collection.mutable.Map[Int,ArrayBuffer[Int]]()
-var result = ArrayBuffer[Int]()
-  for(i<-0 until mat.length){
-    for(j<-0 until mat.length){
-      if(tracker contains(i+j)){
-        tracker.update(i + j, tracker(i + j) += mat(i)(j))
-      }else {
+  def jump(nums: Array[Int]): Int = {
+    var addvalue = 1
+    var index = 0
+    var jumps = 0
+    while(nums(index)+index<nums.length-1) {
+      var sub_array = nums.slice(nums(index + 1), nums(index + nums(index) + 1))
 
-        tracker.put(i + j,  ArrayBuffer(mat(i)(j)))
+      for (i <- 0 until sub_array.length) {
+
+        sub_array(i) = sub_array(i) + addvalue - nums.length
+        addvalue += 1
       }
+      index = sub_array.indexOf(sub_array.max)
+      addvalue = 1
 
+      jumps+=1
     }
+    jumps
   }
- if(mat.length == 1 && mat(0).length == 1){
-    go = 0
- } else if(mat.length == 1 && mat(0).length >= 1){
-   go = mat(0).length -1
- }
- else if (mat.length == 2){
-    go = 2
- } else{
-    go = (mat.length-1)*2
- }
-  for(i<-0 to go) {
-    if (i % 2 == 0) {
-      result ++= tracker(i).sorted(Ordering.Int.reverse)
-    }
-    else {
-      result ++= tracker(i).sorted
-    }
-  }
-  result.toArray
-}
+
+
+val a = Array(2,3,1)
+  a.indexOf(a.max)
+  jump(a)
+//a.indexOf(6)*/
+
+  var b = a.slice(0,7)
+  b(0)=9
+  b(1)
 
 
 
-//test(Map(2 -> ArrayBuffer(4), 1 -> ArrayBuffer(2, 3), 0 -> ArrayBuffer(1)))
+// [4,4,4,4,4]
+// [8,7,6,5,4]
 
-findDiagonalOrder(Array(Array(1,2),Array(3,4)))
-
-// 1 - 0, 2 - 2, 3 - 4, 4 - 6, 5 - 8
